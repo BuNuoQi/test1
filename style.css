@@ -1,0 +1,19 @@
+.box-card{
+    min-width: 550px;
+    padding: 20px;
+}
+.box-card .box-tab .active {
+    background-color: #ccc;
+  }
+  .tab-content{
+    padding:10px 0 ;
+  }
+  .handle-btns{
+    padding: 20px;
+  }
+  .block {
+    margin: 2vw;
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+  }

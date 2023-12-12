@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@next"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
+    <script src="https://unpkg.com/element-plus"></script>
+    <!-- <link rel="stylesheet" href="./js/index.css" /> -->
+    <!-- <script src="./unpkg/elenemt-plus.js"></script> -->
+    <script src="./unpkg/icons-vue.js"></script>
+    <!-- <script src="//unpkg.com/@element-plus/icons-vue"></script> -->
+    <title>丰营</title>
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+    <div id="app">
+        <el-card class="box-card">
+            <el-row>
+                <el-col :span="24" class="box-tab">
+                    <el-button v-for="tab in tabs" :key="tab.id" @click="selectTab(tab.id)"
+                        :class="{ 'active': tab.id === selectedTab }">
+                        {{ tab.label }}</el-button>
+                </el-col>
+                <div class="tab-content">
+                    <template v-if="selectedTab == 'tab1'">
+                        <el-form>
+                            <el-row>
+                                <template v-for="item in formItems" :key="item.label">
+                                    <el-col v-bind="colLayout">
+                                        <el-form-item :label="item.label" style="padding: 20px 20px 0px 0px">
+                                            <template v-if="item.type === 'input' || item.type === 'password'">
+                                                <el-input :placeholder="item.placeholder"
+                                                    v-model="formData[`${item.field}`]"
+                                                    :show-password="item.type === 'password'"
+                                                    v-bind="item.otherOptions" />
+                                            </template>
+                                            <template v-else-if="item.type === 'select'">
+                                                <el-select :placeholder="item.placeholder"
+                                                    v-model="formData[`${item.field}`]" v-bind="item.otherOptions">
+                                                    <el-option v-for="option in item.options" :key="option.value"
+                                                        :label="option.label" :value="option.value" />
+                                                </el-select>
+                                            </template>
+                                            <template v-else-if="item.type === 'datepicker'">
+                                                <el-date-picker :placeholder="item.placeholder" range-separator="至"
+                                                    v-model="formData[`${item.field}`]" v-bind="item.otherOptions" />
+                                            </template>
+                                        </el-form-item>
+                                    </el-col>
+                                </template>
+                                <div class="handle-btns">
+                                    <el-button @click="handleQueryClick">查询</el-button>
+                                    <el-button type="info" @click="handleResetClick">重置</el-button>
+                                </div>
+                            </el-row>
+                        </el-form>
+                        <div>
+                            <el-button type="primary">
+                                Upload<el-icon class="el-icon--right">
+                                    <Upload />
+                                </el-icon>
+                            </el-button>
+                        </div>
+                        <el-table :data="orders" border style="width: 100%" show-summary
+                            :summary-method="calculateColumnSummaries">
+                            <el-table-column prop="id" label="采购编码" width="180"></el-table-column>
+                            <el-table-column prop="vendorName" label="供应商名称" width="180"></el-table-column>
+                            <el-table-column label="商品名称" prop="productName"></el-table-column>
+                            <el-table-column label="商品别名" prop="productAliases"></el-table-column>
+                            <el-table-column label="商品分类" prop="productCategory"></el-table-column>
+                            <el-table-column label="商品单位" prop="commodityUnits"></el-table-column>
+                            <el-table-column label="采购单价" prop="purchaseUnitPrice"></el-table-column>
+                            <el-table-column label="采购数量" prop="quantityPurchased"></el-table-column>
+                            <el-table-column label="入库数量" prop="inboundQuantity"></el-table-column>
+                            <el-table-column label="采购重量" prop="purchaseWeight"></el-table-column>
+                            <el-table-column label="采购金额" prop="theAmountOfThePurchase"></el-table-column>
+                            <el-table-column label="单据状态">
+                                <template #default="scope">
+                                    <el-text v-if="scope.row.status == 1" class="mx-1" type="success">未完成</el-text>
+                                    <el-text v-if="scope.row.status == 0" class="mx-1" type="danger">已完成</el-text>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="创建时间" prop="create_date"></el-table-column>
+                        </el-table>
+                        <div class="block">
+                            <el-pagination @current-change="handleCurrentChange" v-model:current-page="currentPage"
+                                :page-size="pageSize" background layout="prev, pager, next" :total="totalPages" />
+                        </div>
+                    </template>
+                    <template v-else> 空页面 </template>
+                </div>
+            </el-row>
+        </el-card>
+    </div>
+    <script src="./index.js"></script>
+</body>
+
+</html>
